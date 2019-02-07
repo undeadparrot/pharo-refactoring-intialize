@@ -4,6 +4,13 @@ Class {
 	#category : #'Refactoring-Initialize'
 }
 
+{ #category : #extensions }
+SycGenerateInitializerCommand class >> fullBrowserMenuActivation [
+	<classAnnotation>
+	
+	^CmdContextMenuActivation byRootGroupItemOrder: 2.1 for: ClyClassContextOfFullBrowser 
+]
+
 { #category : #execution }
 SycGenerateInitializerCommand >> asRefactorings [
 
