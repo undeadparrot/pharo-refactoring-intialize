@@ -2,10 +2,7 @@ Class {
 	#name : #RBCreateInitializerForClassRefactoring,
 	#superclass : #RBVariableRefactoring,
 	#instVars : [
-		'getterMethod',
-		'setterMethod',
-		'classVariable',
-		'needsReturn'
+		'classVariable'
 	],
 	#category : #'Refactoring-Initialize'
 }
@@ -59,34 +56,4 @@ RBCreateInitializerForClassRefactoring >> transform [
 		compile: (string expandMacrosWith: selector with: variableName)
 		classified: #initialize.
 	^selector
-]
-
-{ #category : #testing }
-RBCreateInitializerForClassRefactoring >> usesAssignmentOf: aString in: aClass classVariable: isClassVar [ 
-	| matcher definingClass |
-	matcher := RBParseTreeSearcher new.
-	matcher
-		answer: false;
-		matches: aString , ' := ``@object'
-			do: [ :aNode :answer | answer or: [ aNode isUsed and: [ aNode methodNode selector ~= aString] ] ].
-	definingClass := isClassVar 
-		ifTrue: [ aClass instanceSide ]
-		ifFalse: [ aClass ].
-	^ (definingClass withAllSubclasses , (isClassVar 
-			ifTrue: [ definingClass classSide withAllSubclasses ]
-			ifFalse: 
-				[ #() ]) 
-		detect: 
-			[ :each | 
-			((isClassVar 
-				ifTrue: [ each whichSelectorsReferToClassVariable: aString ]
-				ifFalse: [ each whichSelectorsReferToInstanceVariable: aString ]) 
-				detect: 
-					[ :sel | 
-					self 
-						checkClass: each
-						selector: sel
-						using: matcher ]
-				ifNone: [ nil ]) notNil ]
-		ifNone: [ nil ]) notNil
 ]

@@ -16,7 +16,7 @@ SycGenerateInitializerCommand >> asRefactorings [
 
 	| refactorings |
 	refactorings := classes collect: [:eachClass |
-		eachClass slots first createRefactoring: RBCreateInitializerForClassRefactoring for: eachClass].
+		RBCreateInitializerForClassRefactoring variable: #none class: eachClass].
 	^refactorings
 ]
 
